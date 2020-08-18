@@ -17,7 +17,7 @@ class LinkList
         void push_back(int data);
         void push_front(int data);
         void insert_(int index,int data);
-        void insert_after_node(Node *param_node);
+        void insert_after_node(Node *param_node,int data);
         void pop_back();
         void pop_front();
         void pop();
@@ -92,6 +92,13 @@ void LinkList::insert_(int index,int data){
         this->used_size++; 
     }
 }
+void LinkList::insert_after_node(Node *param_node,int data){
+    Node *new_node = new Node;
+    new_node->data = data;
+    new_node->nextElement = param_node->nextElement;
+    param_node->nextElement = new_node;
+    this->used_size++;
+}
 int LinkList::size_(){
     return this->used_size;
 }
@@ -104,10 +111,13 @@ int main(){
     testing_.push_back(12);
     testing_.push_back(16);
 
-    std::cout<<"Size is "<<testing_.size_()<<std::endl;
     testing_.insert_(3,9);
+    std::cout<<"Debug: "<<testing_.get(3)->data<<std::endl;
+    testing_.insert_after_node(testing_.get(0),92);
+    
     for(int i=0;i<testing_.size_();i++){
-    std::cout<<testing_.get(i)->data<<std::endl;
+        // Warning These is not appropriate method to print elements i will write function later
+        std::cout<<testing_.get(i)->data<<std::endl;
     }
 
     return 0;
