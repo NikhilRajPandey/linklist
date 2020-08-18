@@ -9,7 +9,7 @@ class Node
 class LinkList
 {
     private:
-        int used_size = 0; // For 1 Element it is 0
+        int used_size = 0;
         Node *FirstElement = new Node;
         Node *LastElement = FirstElement;
         // By Default i am keeping this but when new element will come i will update this value
@@ -32,7 +32,7 @@ Node* LinkList::get(int index){ // It will give you the pointer of that index
         std::cout<<"Error: index is greater than size"<<std::endl;
         return 0;
     }
-    if(index == this->used_size){ // If Requested index is last element
+    if(index == this->used_size-1){ // If Requested index is last element
         return this->LastElement;
     }
 
@@ -67,11 +67,29 @@ void LinkList::push_front(int data){
     this->used_size++;
 }
 void LinkList::insert_(int index,int data){
+    if(index > this->used_size){
+        std::cout<<"Error: index is greater than size"<<std::endl;
+        return;
+    }
     if(index == 0){
         this->push_front(data);
     }
     else if(index == this->used_size){
         this->push_back(data);
+    }
+    else{
+        Node *ptr_of_node = this->FirstElement;
+        Node *newNode = new Node;
+        index--;
+        /* I am starting the index from 1 because if index will be 0 then first `if` will handle it */
+        while (index != 0){
+            ptr_of_node = ptr_of_node->nextElement;
+            index--;
+        }
+        newNode->data = data;
+        newNode->nextElement = ptr_of_node->nextElement;
+        ptr_of_node->nextElement = newNode;
+        this->used_size++; 
     }
 }
 int LinkList::size_(){
@@ -85,10 +103,12 @@ int main(){
     testing_.push_back(78);
     testing_.push_back(12);
     testing_.push_back(16);
-    
-    std::cout<<testing_.get(0)->data<<std::endl;
-    std::cout<<testing_.get(1)->data<<std::endl;
-    std::cout<<testing_.get(2)->data<<std::endl;
+
+    std::cout<<"Size is "<<testing_.size_()<<std::endl;
+    testing_.insert_(3,9);
+    for(int i=0;i<testing_.size_();i++){
+    std::cout<<testing_.get(i)->data<<std::endl;
+    }
 
     return 0;
 }
