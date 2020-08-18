@@ -23,6 +23,8 @@ class LinkList
         void pop();
         void search(int index);
         void empty_it(); // Delete Function
+        void print_elems(int end); // ^^ It will print 0-end elements
+        void print_all();
         Node* get(int index);
         int size_();
 };
@@ -42,6 +44,36 @@ Node* LinkList::get(int index){ // It will give you the pointer of that index
         index--;
     };
     return ptr_of_node;
+}
+int LinkList::size_(){
+    return this->used_size;
+}
+void LinkList::print_elems(int end){
+    if(end >= this->used_size){
+        std::cout<<"Error: index is greater than size"<<std::endl;
+        return;
+    }
+    
+    end--;
+    Node *ptr_of_node = this->FirstElement;
+
+    std::cout<<"{ ";
+    while (end > 0){
+        std::cout<<ptr_of_node->data<<",";
+        ptr_of_node = ptr_of_node->nextElement;
+        end--;
+    }
+    std::cout<<ptr_of_node->data<<" }"<<std::endl;
+}
+void LinkList::print_all(){
+    Node *ptr_of_node = this->FirstElement;
+    
+    std::cout<<"{ ";
+    while (ptr_of_node->nextElement != NULL){
+        std::cout<<ptr_of_node->data<<",";
+        ptr_of_node = ptr_of_node->nextElement;
+    }
+    std::cout<<ptr_of_node->data<<" }"<<std::endl;
 }
 void LinkList::push_back(int data){
     if(this->used_size == 0){ // Means This is the first data in this LinkList
@@ -99,9 +131,6 @@ void LinkList::insert_after_node(Node *param_node,int data){
     param_node->nextElement = new_node;
     this->used_size++;
 }
-int LinkList::size_(){
-    return this->used_size;
-}
 
 int main(){
     LinkList testing_;
@@ -114,11 +143,9 @@ int main(){
     testing_.insert_(3,9);
     std::cout<<"Debug: "<<testing_.get(3)->data<<std::endl;
     testing_.insert_after_node(testing_.get(0),92);
-    
-    for(int i=0;i<testing_.size_();i++){
-        // Warning These is not appropriate method to print elements i will write function later
-        std::cout<<testing_.get(i)->data<<std::endl;
-    }
+
+    testing_.print_all();
+    testing_.print_elems(2);
 
     return 0;
 }
