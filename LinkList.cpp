@@ -38,8 +38,8 @@ class LinkList
         void pop_back();
         void pop_front();
         void pop(int index);
-        int search(int index,bool fromEnd=false); // Give You the index of founded elem
-        void empty_it(int start,int end); // <= Here End will be not deleted
+        int search(int element,bool fromEnd=false); // Give You the index of founded elem
+        void delete_them(int start,int end); // <= Here End will be not deleted
         void clear(); // <= This will delete all elements it
         void print_elems(int end); // ^^ It will print 0-end elements
         void print_all();
@@ -67,11 +67,35 @@ int LinkList::size_(){
     return this->used_size;
 }
 
+int LinkList::search(int element,bool fromEnd){
+    if(this->isEmpty()){return -1;}
+
+    int index = 0;
+    Node *ptr_of_node = this->FirstElement;
+
+    if(!fromEnd){ // If I have to give First index
+        while (ptr_of_node != NULL){
+            if(ptr_of_node->data == element){return index;}
+            ptr_of_node = ptr_of_node->nextElement;
+
+            index++;
+        }
+        return -1; // Means Not Found
+    }
+    else{ // If I have to give last index
+        int founded_index = -1;
+        while (ptr_of_node != NULL){
+            if(ptr_of_node->data == element){founded_index = index;}
+            ptr_of_node = ptr_of_node->nextElement;
+            
+            index++;
+        }
+        return founded_index;
+    }
+}
 // Printing Functions
 void LinkList::print_elems(int end){
-    if(!this->isElemPresent(end)){
-        return;
-    }
+    if(!this->isElemPresent(end)){return;}
     
     end--;
     Node *ptr_of_node = this->FirstElement;
@@ -88,11 +112,14 @@ void LinkList::print_all(){
     Node *ptr_of_node = this->FirstElement;
     
     std::cout<<"{ ";
-    while (ptr_of_node->nextElement != NULL){
-        std::cout<<ptr_of_node->data<<",";
-        ptr_of_node = ptr_of_node->nextElement;
+    if(this->used_size != 0){
+        while (ptr_of_node->nextElement != NULL){
+            std::cout<<ptr_of_node->data<<",";
+            ptr_of_node = ptr_of_node->nextElement;
+        }
+        std::cout<<ptr_of_node->data;
     }
-    std::cout<<ptr_of_node->data<<" }"<<std::endl;
+    std::cout<<" }"<<std::endl;
 }
 
 // All Insertion Function
@@ -208,6 +235,41 @@ void LinkList::pop(int index){
     }
     this->used_size--;
 }
+
+void LinkList::delete_them(int start,int end){
+    if(this->isEmpty()){return;}
+
+    Node *ptr_of_node = this->FirstElement;
+    Node *cache;
+    Node *start_node;
+    int index = 0;
+    /* Sorry For My Bad English */
+    bool start_deleting = false; // This will be activate when start will come in loop
+
+    while (index < end){
+        start_deleting = (index >= start);
+        cache = ptr_of_node;
+        ptr_of_node = ptr_of_node->nextElement;
+
+        if(start_deleting){
+            delete cache;
+            this->used_size--;
+        }
+        else{
+            start_node = cache;
+        }
+        index++;
+    }
+    // If `Start` is 0 then i will select start as list[end-1:]
+    if(start == 0){this->FirstElement = ptr_of_node;return;}
+
+    // other wise This will contain new this->FirstElement (list[{end-start}:])
+    start_node->nextElement = ptr_of_node;
+}
+
+void LinkList::clear(){
+    this->delete_them(0,this->used_size);
+}
 int main(){
     LinkList testing_;
     testing_.push_front(23);
@@ -223,9 +285,16 @@ int main(){
     testing_.insert_after_node(testing_.get(0),92);
 
     testing_.print_all();
-    testing_.pop(testing_.size_()-2);
+    // testing_.pop(testing_.size_()-2);
+    // testing_.delete_them(0,3);
+    testing_.delete_them(1,3);
+    // testing_.clear();
+    // testing_.push_back(16);
     testing_.print_all();
     // testing_.print_elems(2);
+    // std::cout<<testing_.search(23)<<std::endl;
+    // std::cout<<testing_.search(78)<<std::endl;
+    // std::cout<<testing_.search(16,true)<<std::endl;
 
     return 0;
 }
