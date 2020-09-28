@@ -10,10 +10,6 @@ class LinkList
 {
     private:
         int used_size = 0;
-        Node *FirstElement = new Node;
-        Node *LastElement = FirstElement;
-        /* By Default i am keeping this but when new element will come i will update this value
-        I am Keeping LastElement For reduce time complexity for push_back() */
 
         // These Function are for throwing errors
         bool isEmpty(){
@@ -31,6 +27,11 @@ class LinkList
             return true;
         }
     public:
+        Node *FirstElement = new Node;
+        Node *LastElement = FirstElement;
+        /* By Default i am keeping this but when new element will come i will update this value
+        I am Keeping LastElement For reduce time complexity for push_back() */
+
         void push_back(int data);
         void push_front(int data);
         void insert_(int index,int data);
@@ -43,6 +44,7 @@ class LinkList
         void clear(); // <= This will delete all elements it
         void print_elems(int end); // ^^ It will print 0-end elements
         void print_all();
+        void reverse();
         Node* get(int index);
         int size_();
 };
@@ -270,6 +272,23 @@ void LinkList::delete_them(int start,int end){
 void LinkList::clear(){
     this->delete_them(0,this->used_size);
 }
+
+void LinkList::reverse(){
+    Node *prev_node = NULL;
+    Node *curr_node = this->FirstElement;
+    Node *next_node;
+
+    while (true){
+        next_node = curr_node->nextElement;
+        if(next_node == NULL){break;}
+        curr_node->nextElement = prev_node;
+        prev_node = curr_node;
+        curr_node = next_node;
+    }
+    curr_node->nextElement = prev_node;
+    this->FirstElement = curr_node;
+}
+
 int main(){
     LinkList testing_;
     testing_.push_front(23);
