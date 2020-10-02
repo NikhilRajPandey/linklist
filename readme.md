@@ -1,7 +1,7 @@
 # About This
 
-This is My Code Practice For implementing LinkList in C++.
-I will Write readme properly later
+This is my coding practice For implementing Linked List in C++.
+I shall  write readme properly later.
 
 # Contributor
 Name: Nikhil Raj Pandey
